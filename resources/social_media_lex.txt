@@ -1,0 +1,81 @@
+4 chan	SOCIAL_MEDIA
+4-chan	SOCIAL_MEDIA
+4chan	SOCIAL_MEDIA
+ask fm	SOCIAL_MEDIA
+askfm	SOCIAL_MEDIA
+bebo	SOCIAL_MEDIA
+blog	SOCIAL_MEDIA
+blogged	SOCIAL_MEDIA
+blogger	SOCIAL_MEDIA
+bloggers	SOCIAL_MEDIA
+blogging	SOCIAL_MEDIA
+blogosphere	SOCIAL_MEDIA
+blogs	SOCIAL_MEDIA
+chat room	SOCIAL_MEDIA
+chat rooms	SOCIAL_MEDIA
+chatroom	SOCIAL_MEDIA
+chatrooms	SOCIAL_MEDIA
+cyber bullied	SOCIAL_MEDIA
+cyber bullies	SOCIAL_MEDIA
+cyber bully	SOCIAL_MEDIA
+cyber bullying	SOCIAL_MEDIA
+cyber-bullied	SOCIAL_MEDIA
+cyber-bullies	SOCIAL_MEDIA
+cyber-bully	SOCIAL_MEDIA
+cyber-bullying	SOCIAL_MEDIA
+cyberbullied	SOCIAL_MEDIA
+cyberbullies	SOCIAL_MEDIA
+cyberbully	SOCIAL_MEDIA
+cyberbullying	SOCIAL_MEDIA
+face book	SOCIAL_MEDIA
+face-book	SOCIAL_MEDIA
+facebook	SOCIAL_MEDIA
+fb	SOCIAL_MEDIA
+flickr	SOCIAL_MEDIA
+forum	SOCIAL_MEDIA
+forums	SOCIAL_MEDIA
+hash tag	SOCIAL_MEDIA
+hash tags	SOCIAL_MEDIA
+hash-tag	SOCIAL_MEDIA
+hash-tags	SOCIAL_MEDIA
+hashtag	SOCIAL_MEDIA
+hashtags	SOCIAL_MEDIA
+image sharing	SOCIAL_MEDIA
+instagram	SOCIAL_MEDIA
+linked-in	SOCIAL_MEDIA
+linkedin	SOCIAL_MEDIA
+lol-cow	SOCIAL_MEDIA
+lol-cow.farm	SOCIAL_MEDIA
+lolcow	SOCIAL_MEDIA
+lolcow.farm	SOCIAL_MEDIA
+my-space	SOCIAL_MEDIA
+myspace	SOCIAL_MEDIA
+periscope	SOCIAL_MEDIA
+recovery account	SOCIAL_MEDIA
+recovery accounts	SOCIAL_MEDIA
+reddit	SOCIAL_MEDIA
+snap chat	SOCIAL_MEDIA
+snap-chat	SOCIAL_MEDIA
+snapchat	SOCIAL_MEDIA
+social media	SOCIAL_MEDIA
+#social network	SOCIAL_MEDIA
+#social networking	SOCIAL_MEDIA
+#social networks	SOCIAL_MEDIA
+social-media	SOCIAL_MEDIA
+#social-network	SOCIAL_MEDIA
+#social-networking	SOCIAL_MEDIA
+#social-networks	SOCIAL_MEDIA
+spam account	SOCIAL_MEDIA
+spam-account	SOCIAL_MEDIA
+tumblr	SOCIAL_MEDIA
+tweet	SOCIAL_MEDIA
+tweeted	SOCIAL_MEDIA
+tweeting	SOCIAL_MEDIA
+tweets	SOCIAL_MEDIA
+twitter	SOCIAL_MEDIA
+vimeo	SOCIAL_MEDIA
+whats app	SOCIAL_MEDIA
+whatsapp	SOCIAL_MEDIA
+word press	SOCIAL_MEDIA
+word-press	SOCIAL_MEDIA
+wordpress	SOCIAL_MEDIA

@@ -1,0 +1,73 @@
+call of duty	GAMING
+club penguin	GAMING
+computer game	GAMING
+computer gamer	GAMING
+computer gamers	GAMING
+computer games	GAMING
+computer gaming	GAMING
+computer-game	GAMING
+computer-gamer	GAMING
+computer-gamers	GAMING
+computer-games	GAMING
+computer-gaming	GAMING
+coraline	GAMING
+counter strike	GAMING
+counter-strike	GAMING
+counterstrike	GAMING
+dota 2	GAMING
+dragon age	GAMING
+fallout	GAMING
+fortnite	GAMING
+game Boy	GAMING
+game-boy	GAMING
+gameBoy	GAMING
+game console	GAMING
+games console	GAMING
+#gamer	GAMING
+#gamers	GAMING
+gaming	GAMING
+ghost-buster	GAMING
+ghost-busters	GAMING
+ghostbuster	GAMING
+ghostbusters	GAMING
+grand theft auto	GAMING
+halo	GAMING
+league of legends	GAMING
+mine-craft	GAMING
+minecraft	GAMING
+mini-clip	GAMING
+miniclip	GAMING
+nintendo	GAMING
+play-station	GAMING
+play-station 3	GAMING
+play-station 4	GAMING
+play station	GAMING
+play station 3	GAMING
+play station 4	GAMING
+playstation	GAMING
+playstation 3	GAMING
+playstation 4	GAMING
+pokemon	GAMING
+ps3	GAMING
+ps4	GAMING
+ps-3	INTERNET
+ps-4	INTERNET
+ps 3	INTERNET
+ps 4	INTERNET
+sims	GAMING
+smite	GAMING
+videogame	GAMING
+videogames	GAMING
+videogaming	GAMING
+video game	GAMING
+video games	GAMING
+wii	GAMING
+world of tank	GAMING
+world of tanks	GAMING
+world of warcraft	GAMING
+x men	GAMING
+x-men	GAMING
+x box	GAMING
+x-box	GAMING
+xbox	GAMING
+xmen	GAMING
