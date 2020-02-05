@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module online_activity_file_sampler_with_cats</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>online_activity_file_sampler_with_cats</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:t%3A%5Candre%20bittar%5Cworkspace%5Conline_activity_annotator%5Conline_activity_file_sampler_with_cats.py">t:\andre bittar\workspace\online_activity_annotator\online_activity_file_sampler_with_cats.py</a></font></td></tr></table>
+    <p><tt>Online&nbsp;Activity&nbsp;file&nbsp;sampler&nbsp;script&nbsp;(with&nbsp;categories)<br>
+&nbsp;<br>
+This&nbsp;script&nbsp;searches&nbsp;for&nbsp;files&nbsp;containing&nbsp;certain&nbsp;keywords&nbsp;that&nbsp;pertain&nbsp;to<br>
+use&nbsp;of&nbsp;online&nbsp;activity&nbsp;-&nbsp;social&nbsp;media,&nbsp;Internet&nbsp;and&nbsp;online&nbsp;gaming.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pickle.html">pickle</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-copy_files_to_sample"><strong>copy_files_to_sample</strong></a>(files, copy_schema=None)</dt><dd><tt>Create&nbsp;a&nbsp;corpus&nbsp;of&nbsp;files&nbsp;to&nbsp;sample&nbsp;from.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;files:&nbsp;list;&nbsp;a&nbsp;list&nbsp;of&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;copy_schema:&nbsp;bool;&nbsp;copy&nbsp;the&nbsp;eHOST&nbsp;configuration&nbsp;file.</tt></dd></dl>
+ <dl><dt><a name="-get_initial_files"><strong>get_initial_files</strong></a>(reload=True)</dt><dd><tt>Do&nbsp;this&nbsp;first&nbsp;so&nbsp;we&nbsp;don't&nbsp;have&nbsp;to&nbsp;repeat&nbsp;it&nbsp;every&nbsp;time&nbsp;we&nbsp;run&nbsp;the&nbsp;script.</tt></dd></dl>
+ <dl><dt><a name="-process"><strong>process</strong></a>(files, verbose=False)</dt><dd><tt>Run&nbsp;the&nbsp;whole&nbsp;search&nbsp;process.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;files:&nbsp;list;&nbsp;the&nbsp;initial&nbsp;files&nbsp;to&nbsp;search&nbsp;in.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;verbseo:&nbsp;bool;&nbsp;print&nbsp;all&nbsp;messages.<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;files_to_sample:&nbsp;list;&nbsp;the&nbsp;files&nbsp;to&nbsp;sample&nbsp;from.</tt></dd></dl>
+ <dl><dt><a name="-remove_unwanted_patterns"><strong>remove_unwanted_patterns</strong></a>(text, verbose=False)</dt><dd><tt>Removes&nbsp;certain&nbsp;unwanted&nbsp;patterns&nbsp;that&nbsp;are&nbsp;likely&nbsp;to&nbsp;create&nbsp;noise.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;text:&nbsp;str;&nbsp;the&nbsp;text&nbsp;to&nbsp;search&nbsp;and&nbsp;modify.<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;text:&nbsp;str;&nbsp;the&nbsp;modified&nbsp;text.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>DDIR</strong> = 'T:/Andre Bittar/Projects/RS_Internet/NEW_2'<br>
+<strong>REGEX</strong> = r'\b( #[a-z][a-z0-9]+|4[\- ]?chan|askFM|Bebo|Blog[...rld of tanks|World of warcraft|X\-?box|X\-?men)\b'<br>
+<strong>__copyright__</strong> = 'Copyright 2020, André Bittar'<br>
+<strong>__email__</strong> = 'andre.bittar@kcl.ac.uk'<br>
+<strong>__license__</strong> = 'GPL'<br>
+<strong>re_hashtag</strong> = ' #[a-z][a-z0-9]+'<br>
+<strong>re_internet</strong> = r'Internet (?!threat)|on[\- ]*line(?!( +security| ...ne|web[\- ]*address|web[\- ]*site[^ ]*|Pint?erest'<br>
+<strong>re_internet_word</strong> = 'Internet (?!threat)'<br>
+<strong>re_online</strong> = r'on[\- ]*line(?!( +security| *\"))'<br>
+<strong>re_online_gaming</strong> = r'Call of Duty|Club Penguin|Coraline|Counter[\- ]*...|World of tanks|World of warcraft|X\-?box|X\-?men'<br>
+<strong>re_social_media</strong> = r' #[a-z][a-z0-9]+|4[\- ]?chan|askFM|Bebo|Blog[^ ]... ]*|Vimeo|Vine|Word[\- ]?press|you[\- ]?tube[^ ]*'</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">André&nbsp;Bittar</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">['André&nbsp;Bittar']</td></tr></table>
+</body></html>
