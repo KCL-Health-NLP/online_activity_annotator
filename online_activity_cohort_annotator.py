@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 26 11:18:29 2019
-
-@author: ABittar
+    This is a utility script to annotate specific cohorts, e.g. Rosie Sedgwicks's
+    adolescent cohort.
+    Execution examples are provided in comments in the main() method.
 """
 
 import datetime
@@ -12,15 +12,28 @@ import sys
 
 sys.path.append('T:/Andre Bittar/workspace/utils')
 
-from smig_annotator import SMIGAnnotator
-from ehost_annotation_reader import convert_file_annotations, get_corpus_files, load_mentions_with_attributes
-from pandas import Timestamp
+from online_activity_annotator import OnlineActivityAnnotator
+from ehost_annotation_reader import convert_file_annotations
 from pprint import pprint
 from sklearn.metrics import cohen_kappa_score, precision_recall_fscore_support
 from time import time
 
+__author__ = "André Bittar"
+__copyright__ = "Copyright 2020, André Bittar"
+__credits__ = ["André Bittar"]
+__license__ = "GPL"
+__email__ = "andre.bittar@kcl.ac.uk"
 
-def has_SMIG_mention(mentions):
+
+def has_online_activity_mention(mentions):
+    """
+    Check if any online activity mentions have been found.
+    
+    Arguments:
+        - mentions: dict; a dictionary of annotations.
+    
+    Return: bool; True if online activity mention is found, else False.
+    """
     mentions = convert_file_annotations(mentions)
     for mention in mentions:
         mclass = mention.get('class', None)
@@ -33,7 +46,10 @@ def has_SMIG_mention(mentions):
 
 
 def test():
-    smiga = SMIGAnnotator()
+    """
+    Run some test examples.
+    """
+    oaa = OnlineActivityAnnotator()
     
     texts = ['She is always playing on the computer.', 'He play Warcraft online.', 'He spends too much tim eon Facebook.']
     
@@ -43,17 +59,21 @@ def test():
     for text in texts:
         text_id = 'text_' + str(n).zfill(5)
         n += 1
-        mentions = smiga.process_text(text, text_id, verbose=True, write_output=False)
-        print('HAS SMIG:', has_SMIG_mention(mentions))
+        mentions = oaa.process_text(text, text_id, verbose=True, write_output=False)
+        print('HAS SMIG:', has_online_activity_mention(mentions))
         global_mentions.update(mentions)
     
     pprint(global_mentions)
 
 
-
 def count_flagged_patients(df_processed, key):
     """
-    key: dsh_YYYYMMDD_tmp or dsh_YYYYMMDD_notmp
+    Count all patients flagged with a mention of online activity.
+    
+    Arguments:
+        - key: str; oa_YYYYMMDD_tmp or oa_YYYYMMDD_notmp
+    
+    Return: DataFrame; all brcids flagged for presence/absence of online activity.
     """
     n = 0
     t = 0
@@ -71,7 +91,8 @@ def count_flagged_patients(df_processed, key):
 
 def evaluate_sys(results, sys_results):
     """
-    
+    Perform evaluation of the app in comparison with the gold standard manual
+    annotations.
     """
     x_gold = []
     x_sys = []
@@ -107,7 +128,7 @@ def batch_process(main_dir):
     """
     Runs on actual files and outputs new XML.
     """
-    ga = SMIGAnnotator(verbose=False)
+    oaa = OnlineActivityAnnotator(verbose=False)
     
     #main_dir = 'Z:/Andre Bittar/Projects/KA_Self-harm/data/text'
     
@@ -119,7 +140,7 @@ def batch_process(main_dir):
     
     for pdir in pdirs:
          pin = os.path.join(main_dir, pdir, 'corpus').replace('\\', '/')
-         _ = smiga.process(pin, write_output=True)
+         _ = oaa.process(pin, write_output=True)
          print(i, '/', n, pin)
          i += 1
 
@@ -138,17 +159,17 @@ def process(pin):
     
     now = datetime.datetime.now().strftime('%Y%m%d')
     
-    smiga = SMIGAnnotator(verbose=False)
+    oaa = OnlineActivityAnnotator(verbose=False)
     df = pd.read_pickle(pin)
-    df['dsh'] = False
+    df['oa'] = False
     n = len(df)
     
     t0 = time()
     for i, row in df.iterrows():
         docid = row.cn_doc_id
         text = row.text_content
-        mentions = smiga.process_text(text, docid, write_output=False)
-        df.at[i, 'smig_' + now] = has_SMIG_mention(mentions)
+        mentions = oaa.process_text(text, docid, write_output=False)
+        df.at[i, 'oa_' + now] = has_online_activity_mention(mentions)
         if i % 1000 == 0:
             print(i, '/', n)
         

@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 15 14:34:08 2019
-
-@author: ABittar
-
-Social media & Internet-related mention annotator.
 
 """
+    Online Activity annotator
+
+    This annotator marks up mentions of online activity in clinical texts.
+    Online activity is considered to be use of one of the following:
+    - the Internet
+    - social media
+    - online gaming
+
+    Output is in the XML stand-off annotation format that is used
+    by the eHOST annotation tool (see https://code.google.com/archive/p/ehost/).
+
+"""
+
+import argparse
 import os
 import re
 import spacy
@@ -18,16 +26,36 @@ from lexical_annotator import LexicalAnnotatorSequence
 from lexical_annotator import LemmaAnnotatorSequence
 from token_sequence_annotator import TokenSequenceAnnotator
 from detokenizer import Detokenizer
-from smig_file_sampler_with_cats import remove_unwanted_patterns
+from online_activity_file_sampler_with_cats import remove_unwanted_patterns
 from spacy.symbols import LEMMA, LOWER
 from xml.dom.minidom import parseString
 from xml.parsers.expat import ExpatError
 
+from examples.test_examples import text
 
-class SMIGAnnotator:
+__author__ = "André Bittar"
+__copyright__ = "Copyright 2020, André Bittar"
+__credits__ = ["André Bittar"]
+__license__ = "GPL"
+__email__ = "andre.bittar@kcl.ac.uk"
+
+
+class OnlineActivityAnnotator:
+    """
+    Online Activity Annotator
+    
+    Annotates mentions of online activity (use of Internet, online gaming or 
+    social media) in clinical texts.
+    """
     
     def __init__(self, verbose=False):
-        print('SMIG annotator')
+        """
+        Create a new OnlineActivityAnnotator instance.
+        
+        Arguments:
+            - verbose: bool; print all messages.
+        """
+        print('Online Activity Annotator')
         self.nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser'])
         self.text = None
         self.verbose = verbose
@@ -58,6 +86,14 @@ class SMIGAnnotator:
     def load_lexicon(self, path, source_attribute, target_attribute, merge=False):
         """
         Load a lexicon/terminology file for annotation.
+        
+        Arguments:
+            - path: str; the path to the lexicon file.
+            - source_attribute: spaCy symbol; the token attribute to match
+              on (e.g. LEMMA).
+            - target_attribute: spaCy symbol; the token attribute to add the 
+              lexical annotations to (e.g. TAG, or custom attribute INTERNET).
+            - merge: bool; merge annotated spans into a single span.
         """
         if source_attribute == LEMMA:
             lsa = LemmaAnnotatorSequence(self.nlp, path, target_attribute, merge=merge)
@@ -67,6 +103,11 @@ class SMIGAnnotator:
         self.nlp = lsa.add_components()
 
     def load_pronoun_lemma_corrector(self):
+        """
+        Load a pipeline component to convert spaCy pronoun lemma (-PRON-) into
+        the corresponding word form,
+        e.g. ORTH=her LEMMA=-PRON- -> ORTH=her, LEMMA=her.
+        """
         component = LemmaCorrector()
         pipe_name = component.name
 
@@ -76,6 +117,10 @@ class SMIGAnnotator:
             print('-- ', pipe_name, 'exists already. Component not added.')
 
     def load_date_annotator(self):
+        """
+        Load a pipeline component to match and annotate certain date 
+        expressions.
+        """
         component = DateTokenAnnotator()
         pipe_name = component.name
 
@@ -86,39 +131,86 @@ class SMIGAnnotator:
 
     def load_detokenizer(self, path):
         """
-        Load all detokenization rules.
+        Load a pipeline component that stores detokenization rules loaded from 
+        a file.
+        
+        Arguments:
+            - path: str; the path to the file containing detokenization rules.
         """
         print('-- Detokenizer')
         self.nlp = Detokenizer(self.nlp).load_detokenization_rules(path, verbose=self.verbose)
 
     def load_token_sequence_annotator(self, name):
         """
-        Load all token sequence annotators.
+        Load a token sequence annotator pipeline component.
         TODO allow for multiple annotators, cf. lemma and lexical annotators.
         TODO add path argument to specify rule file.
+        
+        Arguments:
+            - name: str; the name of the token sequence annotator - this 
+                    *must* be the name (without the .py extension) of the file
+                    containing the token sequence rules.
         """
         tsa = TokenSequenceAnnotator(self.nlp, name, verbose=self.verbose)
         if tsa.name not in self.nlp.pipe_names:
             self.nlp.add_pipe(tsa)
 
     def get_text(self):
+        """
+        Return the text of the current annotator instance.
+        
+        Return:
+            - text: str; the text of the document being processed.
+        """
         return self.text
 
     def annotate_text(self, text):
+        """
+        Annotate a text string.
+        
+        Arguments:
+            - text: str; the text to annotate.
+        
+        Return:
+            - doc: spaCy Doc; the annotated Doc object.
+        """
         self.text = text
         return self.nlp(text)
 
     def annotate_file(self, path, clean_text):
+        """
+        Annotate the contents of a text file.
+        
+        Arguments:
+            - path: str; the path to a text file to annotate.
+        
+        Return:
+            - doc: spacy Doc; the annotated Doc object.
+        """
         # TODO check for file in input
         # TODO check encoding
         f = open(path, 'r', encoding='Latin-1')
         self.text = f.read()
         self.text = remove_unwanted_patterns(self.text, verbose=False)
+        
+        if len(self.text) >= 1000000:
+            print('-- Unable to process very long text text:', path)
+            return None
+        
         doc = self.nlp(self.text)
         
         return doc
     
     def merge_spans(self, doc):
+        """
+        Merge all longest matching DSH token sequences into single spans.
+        
+        Arguments:
+            - doc: spaCy Doc; the current Doc object.
+        
+        Return:
+            - doc: spaCy Doc; the current Doc object with merged longest spans.
+        """
         offsets = []
         i = 0
         while i < len(doc):
@@ -146,12 +238,18 @@ class SMIGAnnotator:
         return doc
 
     def print_spans(self, doc):
+        """
+        Output all spans in CoNLL-style token annotations to stdout
+
+        Arguments:
+            - doc: spaCy Doc; the current Doc object
+        """
         s = '\n'
         s += 'PIPELINE:\n-- ' + '\n-- '.join(self.nlp.pipe_names)
         s += '\n\n'
-        s += '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format('INDEX', 'WORD', 'LEMMA', 'LOWER', 'POS1', 'POS2', 'HEAD', 'DEP')
+        s += '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format('INDEX', 'WORD', 'LEMMA', 'LOWER', 'POS1', 'POS2', 'HEAD', 'DEP')
 
-        cext = set()
+        cext = set()        
         for a in doc.user_data:
             cext.add(a[1])
 
@@ -162,7 +260,7 @@ class SMIGAnnotator:
 
         s += '\n'
 
-        s += '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format('-----', '----', '-----', '----', '----', '----', '----')
+        s += '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format('-----', '----', '-----', '----', '----', '----', '----', '----')
 
         for a in cext:
             s += '{:<10}'.format('-' * len(a))
@@ -170,13 +268,23 @@ class SMIGAnnotator:
         print(s, file=sys.stderr)
         
         for token in doc:
-            s = '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format(token.i, token.text, token.lemma_, token.lower_, token.tag_, token.pos_, token.head.i, token.dep_)
+            s = '{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}{:<10}'.format(token.i, token.text, token.lemma_, token.lower_, token.tag_, token.pos_, token.head.i, token.dep_)
             for a in cext:
                 val = token._.get(a)
                 s += '{:10}'.format(val or '_')
             print(s, file=sys.stderr)
 
     def build_ehost_output(self, doc):
+        """
+        Construct a dictionary representation of all annotations.
+
+        Arguments:
+            - doc: spacy Doc; the processed spaCy Doc object.
+        
+        Return:
+            - mentions: dict; a dictionary containing all annotations ready for
+                        output in eHOST XML format.
+        """
         mentions = {}
         n = 1
         for token in doc:
@@ -200,6 +308,17 @@ class SMIGAnnotator:
         return mentions
     
     def write_ehost_output(self, pin, annotations, verbose=False):
+        """
+        Write an annotated eHOST XML file to disk.
+        
+        Arguments:
+            - pin: str; the input file path (must be in eHOST directory structure).
+            - annotations: dict; the dictionary of detected annotations.
+            - verbose: bool; print all messages.
+        
+        Return:
+            - root: Element; the root node of the new XML ElementTree object.
+        """
         ehost_pout = os.path.splitext(pin.replace('corpus', 'saved'))[0] + '.txt.knowtator.xml'
 
         root = ET.Element('annotations')
@@ -283,10 +402,22 @@ class SMIGAnnotator:
         return root
 
     def process(self, path, clean_text=True, write_output=True):
+        """
+        Process a single document or directory structure.
+        
+        Arguments:
+            - path: str; indicates text file or directory to process. If a directory, the
+                structure must be that used by the eHOST annotation tool.
+            - clean_text: bool; clean text prior to processing by removing unwanted patterns.
+            - write_output: bool; save the annotated output to file.
+        
+        Return:
+            - global_mentions: dict; a dictionary containing all annotated mentions.
+        """
         global_mentions = {}
 
         if os.path.isdir(path):
-            print('-- Processing directory...')
+            print('-- Processing directory...', file=sys.stderr)
             files = os.listdir(path)
             
             for f in files:
@@ -302,9 +433,7 @@ class SMIGAnnotator:
                 
                 mentions = self.build_ehost_output(doc)
                 global_mentions[f + '.knowtator.xml'] = mentions
-                
-                print(pin, mentions)
-                
+                                
                 if write_output:
                     self.write_ehost_output(pin, mentions, verbose=self.verbose)
                 
@@ -342,6 +471,18 @@ class SMIGAnnotator:
         return global_mentions
 
     def process_text(self, text, text_id, clean_text=False, write_output=False, verbose=False):
+        """
+        Process a text string.
+        
+        Arguments:
+            - text: str; the input text.
+            - text_id: str; a user-defined identifier for the text.
+            - clean_text: bool; clean text prior to processing by removing unwanted patterns.
+            - verbose: bool; print all messages.
+
+        Return:
+            - global_mentions: dict; a dictionary containing all annotated mentions.
+        """
         self.verbose = verbose
         if self.verbose:
             print('-- Processing text string:', text, file=sys.stderr)
@@ -360,13 +501,22 @@ class SMIGAnnotator:
         global_mentions[text_id] = mentions
 
         if write_output:
-            self.write_ehost_output('output/test.txt', mentions, verbose=self.verbose)
+            self.write_ehost_output('test.txt', mentions, verbose=self.verbose)
         
         return global_mentions
 
 
 class LemmaCorrector(object):
+    """
+    Lemma Corrector
+    
+    Replace spaCy's default lemma for relevant pronouns and other words.
+    """
+    
     def __init__(self):
+        """
+        Create a new LemmaCorrector instance.
+        """
         self.name = 'pronoun_lemma_corrector'
 
     def __call__(self, doc):
@@ -379,7 +529,16 @@ class LemmaCorrector(object):
 
 
 class DateTokenAnnotator(object):
+    """
+    Date Token Annotator
+    
+    Annotate specific and easily matched date patterns.
+    """
+
     def __init__(self):
+        """
+        Create a new DateTokenAnnotator instance.
+        """
         self.name = 'date_token_annotator'
 
     def __call__(self, doc):
@@ -406,70 +565,38 @@ def test(smiga):
             smiga.process(pin, write_output=False)    
 
 if __name__ == '__main__':
-    smiga = SMIGAnnotator(verbose=True)
-    text = 'She uses social media alot, especially Facebook and FB and facebook. He also plays computer games all day.'
-    text = 'He likes to chat online and he chats online and she chats on-line and they both chat on line. Facebook chats online'
-    text = 'She likes e-communication and e-communicates a lot she goes on lol-cow.farm'
-    text = 'She does image sharing and lots of instant messaging, she send instant messages.'
-    text = 'she uses the #hashtag.'
-    text = 'She plays World of Warcraft on her Playstation 3.'
-    text = 'She plays computer game.'
-    text = 'She plays Minecraft'
-    text = '# Twitter:  @NHSGreenwichCCG'
-    text = """PA
-
-PC
-
-PD
-
-    """
-    text = 'He also noted that he and a friend are starting a ‘you tube’ channel on Minecraft and are making and editing the videos and uploading them and he feels this is ‘making me happy’.'
-    text = 'These days in his free time he loves to read, watch movies or TV clips on YouTube and play Sims- a pc game where you create families and lives? '
-    text = """If you are happy to use the Internet to complete this questionnaire, the details you will need are as follows:
-
-Web address
- www.dawba.net 
-
-Your ID
-    """
-    text = """Page 1 of 12Children's Services - ICS Core Assessment
-
-03/04/2013mhtml:file://C:\Documents and Settings\CHaslope\Local Settings\Temporary Internet ...
-
-
-
-was at risk of sexual exploitation as he was gaining access to GAY clubs in the West End and also 
-"""
-    text = 'As part of Dr Paramala Santosh’s assessment, he would like you to complete an Internet Questionnaire and a PONS Questionnaire that you will find attached. '
-    text = 'Enjoys playing video Games with them, and going to the cinema (Kung Fu Panda 2).'
-    text = 'Website : www.camhs.slam.nhs.uk'
-    text = """website 
-<http://www.lambeth.gov.uk/>"""
-    text = """
-mum tried to call Mrs Halliman to org exams and exlcuion suite for J to go bakc to school
-
-Website - they cannot get on school site for revision papers - I advise the libary as mum internet cant do this
-
-Plan:
-
-"""
-    text = """
-    complete the DAWBA online here at Lennard Lodge.
-    """
-    text = """Website: www.samaritans.org.uk
-    Website: http://www.samaritans.org.uk
-    Website: www.chromams.com
-    """
-
-    text = 'He likes You Tube a lot.'
-    text = 'he uses his smart phone a lot.'
-    text = 'he uses his computers a lot.'
-    text = 'she plays online games.'
-    text = 'she plays computer games.'
-    text = 'She uses Facebook a lot.'
-    text = "She plays on her mum's tablet"
-    text = "She plays on his tablet"
-
-    smiga.process_text(text, 'test_001', write_output=True, verbose=True)
-    #smiga.process('T:/Andre Bittar/Projects/RS_Internet/Evaluation/System/files/corpus', clean_text=True, write_output=True)
-    #smiga.process('T:/Andre Bittar/Projects/RS_Internet/Evaluation/Round2_RS_TB_6000/System/files/corpus', clean_text=True, write_output=True)
+    parser = argparse.ArgumentParser(description='Online Activity Annotator')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-d', '--input_dir', type=str, nargs=1, help='the path to the directory containing text files to process.', required=False)
+    group.add_argument('-f', '--input_file', type=str, nargs=1, help='the path to a text file to process.', required=False)
+    group.add_argument('-t', '--text', type=str, nargs=1, help='a text string to process.', required=False)
+    group.add_argument('-e', '--examples', action='store_true', help='run on test examples (no output to file).', required=False)
+    parser.add_argument('-w', '--write_output', action='store_true', help='write output to file.', required=False)
+    parser.add_argument('-v', '--verbose', action='store_true', help='verbose mode.', required=False)
+    
+    if len(sys.argv) <= 1:
+        parser.print_help()
+    
+    args = parser.parse_args()
+    
+    if args.text is not None:
+        oaa = OnlineActivityAnnotator(verbose=args.verbose)
+        oa_annotations = oaa.process_text(args.text[0], 'text_001', write_output=args.write_output, verbose=args.verbose)
+    elif args.input_dir is not None:
+        if os.path.isdir(args.input_dir[0]):
+            oaa = OnlineActivityAnnotator(verbose=args.verbose)
+            oa_annotations = oaa.process(args.input_dir[0], write_output=args.write_output)
+        else:
+            print('-- Error: argument -d/--input_dir must be an existing directory.\n')
+            parser.print_help()
+    elif args.input_file is not None:
+        if os.path.isfile(args.input_file[0]):
+            oaa = OnlineActivityAnnotator(verbose=args.verbose)
+            oa_annotations = oaa.process(args.input_file[0], write_output=args.write_output)
+        else:
+            print('-- Error: argument -f/--input_file must be an existing text file.\n')
+            parser.print_help()
+    elif args.examples:
+        print('-- Running examples...', file=sys.stderr)
+        oaa = OnlineActivityAnnotator(verbose=args.verbose)
+        oa_annotations = oaa.process_text(text, 'text_001', write_output=False, verbose=True)

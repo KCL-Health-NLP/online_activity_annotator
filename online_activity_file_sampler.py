@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 12 10:51:31 2018
+    Online Activity file sampler script
 
-@author: ABittar
+    This script searches for files containing certain keywords that pertain to
+    use of online activity - social media, Internet and online gaming.
+
 """
 
 import os
 import re
 from ehost_annotation_reader import get_corpus_files
 from shutil import copy
+
+__author__ = "André Bittar"
+__copyright__ = "Copyright 2020, André Bittar"
+__credits__ = ["André Bittar"]
+__license__ = "GPL"
+__email__ = "andre.bittar@kcl.ac.uk"
 
 """d1 = 'T:/Sophie Epstein/Annotations/annotation_folders'
 d2 = 'T:/Sophie Epstein/Annotations/blind_test_data/blind_testdata_annotation'
@@ -50,19 +58,27 @@ regex = regex_2 + '|' + hashtag_regex + '|' + pc_regex + '|' + internet_regex + 
 DDIR = 'T:/Rosie Sedgwick/SE_Suicidality/ALL_3'
 
 def remove_unwanted_patterns(text):
-    #print('BEFORE--------------------')
-    #print(text)
+    """
+    Removes certain unwanted patterns that are likely to create noise.
     
-    # remove difficult patterns to exclude
+    Arguments:
+        - text: str; the text to search and modify.
+    
+    Return:
+        - text: str; the modified text.
+    """
     text = re.sub('Website *:', '', text, flags=re.I)
     text = re.sub('DISCLAIMER.+-----------------------.+\n', '', text)
-
-    #print('AFTER--------------------')
-    #print(text)
-    
     return text
 
 def copy_files_to_sample(files, copy_schema=None):
+    """
+    Create a corpus of files to sample from.
+    
+    Arguments:
+        - files: list; a list of files.
+        - copy_schema: bool; copy the eHOST configuration file.
+    """
     print('-- Copying sampled files to main directory...', end='')
     for src in files:
         dest = src.replace('T:/Andre Bittar/Corpora/SE_Suicidality/annotations', DDIR)
@@ -84,6 +100,12 @@ def copy_files_to_sample(files, copy_schema=None):
     print('Done.')
 
 def process():
+    """
+    Run the whole search process.
+    
+    Return:
+        - files_to_sample: list; the files to sample from.
+    """
     main_src_dir = 'T:/Andre Bittar/Corpora/SE_Suicidality/annotations/'
     files = get_corpus_files(main_src_dir, file_types='txt')
     files_to_sample = []

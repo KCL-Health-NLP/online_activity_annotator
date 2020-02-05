@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 12 10:51:31 2018
+    Online Activity file sampler script (with categories)
 
-@author: ABittar
+    This script searches for files containing certain keywords that pertain to
+    use of online activity - social media, Internet and online gaming.
+
 """
 
 import os
@@ -14,6 +16,13 @@ sys.path.insert(0, 'T:/Andre Bittar/workspace/utils')
 
 from ehost_annotation_reader import get_corpus_files
 from shutil import copy
+
+__author__ = "André Bittar"
+__copyright__ = "Copyright 2020, André Bittar"
+__credits__ = ["André Bittar"]
+__license__ = "GPL"
+__email__ = "andre.bittar@kcl.ac.uk"
+
 
 """d1 = 'T:/Sophie Epstein/Annotations/annotation_folders'
 d2 = 'T:/Sophie Epstein/Annotations/blind_test_data/blind_testdata_annotation'
@@ -57,6 +66,15 @@ DDIR = 'T:/Andre Bittar/Projects/RS_Internet/NEW_2'
 
 
 def remove_unwanted_patterns(text, verbose=False):
+    """
+    Removes certain unwanted patterns that are likely to create noise.
+    
+    Arguments:
+        - text: str; the text to search and modify.
+    
+    Return:
+        - text: str; the modified text.
+    """
     len_b = len(text)
     patterns = {'Website[\t ]*[:\-]': re.I + re.M + re.DOTALL,
                 'Visit our[\t ]*website[\t ]+(http://)?www.slam.nhs.uk': re.I + re.M + re.DOTALL,
@@ -66,7 +84,7 @@ def remove_unwanted_patterns(text, verbose=False):
                 'Web[^\n\r\.\;\,\:]+?[\n\r\t\s]+www.dawba.net': re.M + re.DOTALL,
                 '\*\*\*\*\*\*\*\*\*\*.+\*\*\*\*\*\*\*\*\*\*': re.M + re.DOTALL}
     
-    # remove difficult patterns to exclude - replace with equal number of spaces
+    # remove difficult patterns to exclude - replace with equal number of spaces to maintain text length
     for p in patterns:
         flags = patterns.get(p)
         matches = re.findall(p, text, flags=flags)
@@ -98,6 +116,13 @@ def get_initial_files(reload=True):
 
 
 def copy_files_to_sample(files, copy_schema=None):
+    """
+    Create a corpus of files to sample from.
+    
+    Arguments:
+        - files: list; a list of files.
+        - copy_schema: bool; copy the eHOST configuration file.
+    """
     print('-- Copying sampled files to main directory...', end='')
     for src in files:
         dest = src.replace('T:/Andre Bittar/Corpora/SE_Suicidality/annotations', DDIR)
@@ -120,6 +145,16 @@ def copy_files_to_sample(files, copy_schema=None):
 
 
 def process(files, verbose=False):
+    """
+    Run the whole search process.
+    
+    Arguments:
+        - files: list; the initial files to search in.
+        - verbseo: bool; print all messages.
+    
+    Return:
+        - files_to_sample: list; the files to sample from.
+    """
     files_to_sample = []
 
     if not os.path.isdir(DDIR):

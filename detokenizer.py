@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Aug 17 13:09:54 2018
-
-@author: ABittar
+    Detokenizer
+    
+    This is a spaCy pipeline component to modify default tokenization.
+    New tokenization rules are specified in an external resource file. These 
+    rules are loaded when the component is added to the pipeline and applied 
+    when the pipeline is executed.
 """
 
 import os
@@ -11,17 +14,39 @@ import sys
 
 from spacy.symbols import LEMMA, LOWER, ORTH, POS, TAG
 
+__author__ = "André Bittar"
+__copyright__ = "Copyright 2020, André Bittar"
+__credits__ = ["André Bittar"]
+__license__ = "GPL"
+__email__ = "andre.bittar@kcl.ac.uk"
+
 
 class Detokenizer(object):
+    """
+    Detokenizer
+    
+    Detokenize a text according to a set of specified rules.
+    """
+    
     def __init__(self, nlp):
+        """
+        Create a new Detokenizer instance.
+        
+        Arguments:
+            - nlp: spaCy Language; a spaCy text processing pipeline instance.
+        """
         self.nlp = nlp
 
     def load_detokenization_rules(self, path, verbose=False):
         """
         Load rules to undo tokenization.
-        :param path: the path to the rule file
-        :param verbose: print all messages
-        :return: None
+        
+        Arguments:
+            - path: str; the path to the rule file
+            - verbose: bool; print all messages
+        
+        Return:
+            - self.nlp: spaCy Lang; the loaded spaCy piepline object with added detokenization rules
         """
         lines = [line.split('\t') for line in open(path, 'r').read().split('\n') if not line.startswith('#') and line != '']
 
@@ -49,9 +74,9 @@ class Detokenizer(object):
 
 
 if __name__ == '__main__':
-    nlp = spacy.load('en')
+    nlp = spacy.load('en_core_web_sm')
     
-    text = 'This is a start-up.'
+    text = 'This is Face-book'
     
     doc = nlp(text)
 
@@ -62,7 +87,7 @@ if __name__ == '__main__':
         string = '{:<5}{:<15}{:<15}{:<15}{:<15}{:<15}'.format(token.i, token.text, token.lemma_, token.tag_, token.head.i, token.dep_)
         print(string)
     
-    tok_rules_path = os.path.join('resources', 'detokenization_rules.txt')
+    tok_rules_path = os.path.join('resources', 'detokenization_rules_smig.txt')
     dtk = Detokenizer(nlp)
     nlp = dtk.load_detokenization_rules(tok_rules_path)
     

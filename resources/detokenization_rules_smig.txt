@@ -14,6 +14,9 @@ e-communications	e-communication	NN	NOUN
 e-communicate	e-communicate	_	_
 e-communicates	e-communicate	_	_
 e-communicated	e-communicate	_	_
+face-book	FaceBook	NNP	NOUN
+Face-book	FaceBook	NNP	NOUN
+Face-Book	FaceBook	NNP	NOUN
 game-boy	Game Boy	NNP	NOUN
 Game-boy	Game Boy	NNP	NOUN
 Game-Boy	Game Boy	NNP	NOUN
