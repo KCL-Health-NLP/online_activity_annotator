@@ -576,27 +576,26 @@ if __name__ == '__main__':
     
     if len(sys.argv) <= 1:
         parser.print_help()
+        sys.exit(0)
     
     args = parser.parse_args()
+
+    oaa = OnlineActivityAnnotator(verbose=args.verbose)
     
     if args.text is not None:
-        oaa = OnlineActivityAnnotator(verbose=args.verbose)
         oa_annotations = oaa.process_text(args.text[0], 'text_001', write_output=args.write_output, verbose=args.verbose)
     elif args.input_dir is not None:
         if os.path.isdir(args.input_dir[0]):
-            oaa = OnlineActivityAnnotator(verbose=args.verbose)
             oa_annotations = oaa.process(args.input_dir[0], write_output=args.write_output)
         else:
             print('-- Error: argument -d/--input_dir must be an existing directory.\n')
             parser.print_help()
     elif args.input_file is not None:
         if os.path.isfile(args.input_file[0]):
-            oaa = OnlineActivityAnnotator(verbose=args.verbose)
             oa_annotations = oaa.process(args.input_file[0], write_output=args.write_output)
         else:
             print('-- Error: argument -f/--input_file must be an existing text file.\n')
             parser.print_help()
     elif args.examples:
         print('-- Running examples...', file=sys.stderr)
-        oaa = OnlineActivityAnnotator(verbose=args.verbose)
         oa_annotations = oaa.process_text(text, 'text_001', write_output=False, verbose=True)
