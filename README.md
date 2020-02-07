@@ -1,5 +1,5 @@
-# smig_annotator
+# online_activity_annotator
 
-**Social media, Internet and gaming annotator**
+**Online Activity Annotator**
 
-Annotates mentions of social media, Internet and online gaming related terms in clinical notes.
+Annotates mentions of online activity (social media, Internet and online gaming) and related terms in clinical notes.
