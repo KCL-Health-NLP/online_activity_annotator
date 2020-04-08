@@ -58,23 +58,8 @@ class TokenSequenceAnnotator(object):
             from resources.token_sequence_rules_test import TEST_RULES
             self.rules = TEST_RULES
         elif name == 'level0':
-            from resources.token_sequence_rules import RULES
+            from resources.token_sequence_rules_smi import RULES
             self.rules = RULES
-        elif name == 'level1':
-            from resources.token_sequence_rules_1 import RULES_1
-            self.rules = RULES_1
-        elif name == 'time':
-            from resources.token_sequence_rules_time import RULES_TIME
-            self.rules = RULES_TIME
-        elif name == 'negation':
-            from resources.token_sequence_rules_negation import RULES_NEGATION
-            self.rules = RULES_NEGATION
-        elif name == 'status':
-            from resources.token_sequence_rules_status import RULES_STATUS
-            self.rules = RULES_STATUS
-        elif name == 'history':
-            from resources.token_sequence_rules_history import RULES_HISTORY
-            self.rules = RULES_HISTORY
         self.nlp = nlp
         self.matcher = None
         self.matches = {}
