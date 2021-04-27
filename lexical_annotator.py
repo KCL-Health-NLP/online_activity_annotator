@@ -20,12 +20,6 @@ from spacy.matcher import PhraseMatcher, Matcher
 from spacy.tokens import Span, Token
 from spacy.symbols import LEMMA, LOWER
 
-__author__ = "André Bittar"
-__copyright__ = "Copyright 2020, André Bittar"
-__credits__ = ["André Bittar"]
-__license__ = "GPL"
-__email__ = "andre.bittar@kcl.ac.uk"
-
 
 class LexicalAnnotatorSequence(object):
     """

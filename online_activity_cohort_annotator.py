@@ -18,12 +18,6 @@ from pprint import pprint
 from sklearn.metrics import cohen_kappa_score, precision_recall_fscore_support
 from time import time
 
-__author__ = "André Bittar"
-__copyright__ = "Copyright 2020, André Bittar"
-__credits__ = ["André Bittar"]
-__license__ = "GPL"
-__email__ = "andre.bittar@kcl.ac.uk"
-
 
 def has_online_activity_mention(mentions):
     """

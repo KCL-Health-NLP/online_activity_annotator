@@ -33,12 +33,6 @@ from xml.parsers.expat import ExpatError
 
 from examples.test_examples import text
 
-__author__ = "André Bittar"
-__copyright__ = "Copyright 2020, André Bittar"
-__credits__ = ["André Bittar"]
-__license__ = "GPL"
-__email__ = "andre.bittar@kcl.ac.uk"
-
 
 class OnlineActivityAnnotator:
     """

@@ -17,12 +17,6 @@ sys.path.insert(0, 'T:/Andre Bittar/workspace/utils')
 from ehost_annotation_reader import get_corpus_files
 from shutil import copy
 
-__author__ = "André Bittar"
-__copyright__ = "Copyright 2020, André Bittar"
-__credits__ = ["André Bittar"]
-__license__ = "GPL"
-__email__ = "andre.bittar@kcl.ac.uk"
-
 
 """d1 = 'T:/Sophie Epstein/Annotations/annotation_folders'
 d2 = 'T:/Sophie Epstein/Annotations/blind_test_data/blind_testdata_annotation'
